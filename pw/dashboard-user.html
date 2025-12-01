@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Utente</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="dashboard">
+    <header>
+        <h1>Area Utente</h1>
+        <div class="actions">
+            <button type="button" id="open-profile-management" class="button">Gestione Profilo</button>
+            <a class="button" href="index.html">Esci</a>
+        </div>
+    </header>
+    <section class="ticket-form card">
+        <h2>Apri un nuovo ticket</h2>
+        <form id="ticket-creation-form"> <label>Titolo
+                <input type="text" placeholder="Es. Problema di stampa" required />
+            </label>
+            <label>Descrizione
+                <textarea rows="4" placeholder="Descrivi il problema" required></textarea>
+            </label>
+            <label>Priorità
+                <select required>
+                    <option value="bassa">Bassa</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+            </label>
+            <button type="submit">Invia ticket</button>
+        </form>
+    </section>
+
+    <section class="ticket-list card">
+        <h2>I tuoi ticket</h2>
+        <ul>
+        </ul>
+    </section>
+    
+    <div class="modal" id="profile-management-modal">
+        <div class="modal-content card">
+            <header>
+                <h2>Gestione Profilo</h2>
+                <button class="close-modal" id="close-profile-management" type="button">X</button>
+            </header>
+
+            <form id="profile-update-form">
+                <label>Nome
+                    <input type="text" id="profile-name" required />
+                </label>
+                <label>Email
+                    <input type="email" id="profile-email" required />
+                </label>
+                <label>Nuova Password (Lascia vuoto per non cambiare)
+                    <input type="password" id="profile-password" placeholder="••••••••" />
+                </label>
+                <button type="submit">Salva Modifiche</button>
+            </form>
+
+            <footer>
+                <p class="note-meta">Aggiornando l'email potresti dover effettuare nuovamente l'accesso.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+<script src="js/app.js"></script>
+
+</html>

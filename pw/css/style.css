@@ -1,0 +1,554 @@
+:root {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color-scheme: light dark;
+    --bg: #f6f7fb;
+    --fg: #111;
+    --accent: #3b82f6;
+    --card: #fff;
+    --border: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Definisco una larghezza massima per tutto il contenuto principale della dashboard */
+body.dashboard {
+    /* Centra la pagina orizzontalmente */
+    text-align: center;
+    /* Utilizza l'intera altezza visibile */
+    min-height: 100vh; 
+    padding: 20px 40px; 
+    background-color: #f0f2f5; 
+    /* Consente agli elementi all'interno di sfruttare lo spazio */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spazio tra header, widgets e la sezione ticket */
+}
+
+/* Applica la centratura a tutti i blocchi principali */
+header, .widgets, .card {
+    max-width: 1200px; 
+    margin-left: auto; 
+    margin-right: auto;
+    text-align: left; 
+    padding: 0 20px;
+}
+
+
+.auth-page .card,
+.dashboard header,
+.dashboard .widgets article {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+}
+
+.card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 20px; 
+}
+
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    animation: fade 0.25s ease;
+}
+
+.auth-form.is-active {
+    display: flex;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+}
+
+input {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem;
+}
+
+button,
+.button {
+    border: none;
+    border-radius: 999px;
+    padding: 0.85rem 1.5rem;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.switch-link {
+    font-size: 0.9rem;
+    text-align: center;
+    color: #475569;
+}
+
+.link-button {
+    background: transparent;
+    color: var(--accent);
+    padding: 0;
+    margin-left: 0.25rem;
+}
+
+.link-button:hover {
+    text-decoration: underline;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard {
+    flex-direction: column;
+    gap: 2rem;
+    width: min(1200px, 100%);
+}
+
+.dashboard header {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dashboard .widgets {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard .widgets article {
+    padding: 1.5rem;
+}
+
+.admin header .actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Stile per il container delle note */
+.internal-notes {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    /* Contenitore delle Note Interne */
+    margin: 0 20px;
+}
+
+
+
+/* Stile per ogni singola nota */
+.note-item {
+    padding: 10px;
+    border-left: 4px solid var(--color-primary); /* Una linea laterale colorata */
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.note-item:last-child {
+    margin-bottom: 0;
+}
+
+.note-content {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+/* Metadati (autore/data) */
+.note-meta {
+    display: block;
+    text-align: right;
+    font-size: 0.75em;
+    color: #ff6600;
+    text-align: center;
+}
+
+/* Stile per i messaggi di errore/vuoto */
+.note-empty, .note-error {
+    text-align: center;
+    padding: 10px;
+    color: #999;
+}
+
+/* REGOLA 1: Il contenitore del MODALE (Overlay)*/
+.modal {
+    /* Posizionamento fisso rispetto alla finestra del browser */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Allineamento del contenuto (il box bianco) al centro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Nascondi il modale per default */
+    opacity: 0;
+    visibility: hidden;
+    /* Assicura che sia sopra tutto il resto */
+    z-index: 1000; 
+    /* aggiunge una transizione fluida */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* REGOLA 2: Mostra il Modale quando ha la classe 'is-active' */
+.modal.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* REGOLA 3: Il box interno (Il pannello di gestione)*/
+.modal-content {
+    /* Imposta la larghezza massima per non coprire tutto */
+    max-width: 900px; 
+    width: 90%; 
+    max-height: 90%;
+    overflow-y: auto; /* Permette lo scroll se la lista è troppo lunga */
+    padding: 20px;
+    /* Il contenuto deve apparire sopra lo sfondo semitrasparente */
+    position: relative; 
+}
+
+/* Stile per il pulsante di chiusura (X) in alto a destra */
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    color: #cc0000;
+    font-weight: bold;
+    line-height: 1; /* Rimuove lo spazio extra intorno alla 'X' */
+    padding: 5px;
+}
+
+.modal-content header {
+    /*flexbox per il pulsante 'X' */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-right: 30px;
+}
+
+
+.modal-content header h2 {
+    text-align: center; 
+    /*deve occupare tutto lo spazio disponibile per centrare correttamente */
+    flex-grow: 1; 
+}
+
+/* Stile per la tabella nel modale */
+.user-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.user-list-table th, .user-list-table td {
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.user-list-table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+/* testo all'interno del corpo della tabella utenti */
+#user-table-body td {
+    color: #FFC300; /* Giallo dorato/Arancio chiaro per la leggibilità */
+}
+
+/* Stile per il footer che contiene la nota del modale di gestione utenti */
+.modal-content footer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    text-align: center;
+    align-content: center;
+}
+
+/* --- LAYOUT GRIGLIA WIDGETS --- */
+/*layout per Storico) */
+.widgets.grid {
+   display: grid;
+    /* Due colonne per la larghezza e due righe per l'altezza */
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: auto 1fr; /* La prima riga alta quanto il contenuto, la seconda riempie lo spazio */
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* Mantengo la centratura del contenitore principale */
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+    }
+
+/* --- STILE WIDGET STORICO --- */
+#history-widget h3 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+#history-widget {
+    /* Posiziona l'elemento nella prima colonna e nella prima riga */
+    grid-column: 1 / 2; /* Inizia alla linea 1, finisce alla linea 2 (prima colonna) */
+    grid-row: 1 / 2;    /* Inizia alla linea 1, finisce alla linea 2 (prima riga) */
+   }
+
+.deleted-ticket-item {
+    padding: 5px 0;
+}
+
+.deleted-ticket-item p {
+    margin: 3px 0;
+}
+
+.history-title {
+    font-weight: bold;
+    color: #4b0000;
+}
+
+.history-desc {
+    font-size: 0.85em;
+    color: #cb5f00;
+    white-space: pre-wrap; /* Mantiene la formattazione se presente */
+}
+
+.history-meta {
+    display: block;
+    font-size: 0.75em;
+    color: #b99a00;
+    margin-top: 5px;
+}
+
+#deleted-tickets-list hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 10px 0;
+}
+
+/*STILI WIDGET COLASSABILE */
+/* Stile per l'header del widget per allineare titolo e pulsante */
+#history-widget header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+/* Stile del pulsante collapse */
+.collapse-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2em;
+    padding: 0;
+    line-height: 1;
+    color: #007bff; 
+    transition: transform 0.3s;
+}
+
+/* Icona + / - */
+.collapse-icon {
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+/* Regola base per nascondere il contenuto (CHIUSO DI DEFAULT) */
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+/* Stato: WIDGET APERTO */
+.card:not(.is-collapsed) .collapsible-content {
+    /*un'altezza sufficiente ad accogliere il contenuto */
+    max-height: 500px; 
+    padding-top: 10px;
+}
+
+/* Rotazione dell'icona quando è APERTO */
+.card:not(.is-collapsed) .collapse-icon {
+    transform: rotate(45deg); /* Per trasformare il '+' in una 'X' o ruotarlo */
+}
+
+/* Stile per i form all'interno del modale (Gestione Profilo) */
+#profile-update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+}
+
+#profile-update-form label {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-update-form input[type="text"],
+#profile-update-form input[type="email"],
+#profile-update-form input[type="password"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.ticket-table table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Mantiene larghezza colonne fissa, anche se non la definiamo esplicitamente */
+    min-width: 800px; /* Aggiunge una larghezza minima per prevenire l'eccessivo collasso su schermi medi */
+}
+
+
+/* Allineamento di base per tutte le celle del corpo (td) e intestazioni (th) */
+.ticket-table th,
+.ticket-table td {
+    text-align: left; 
+    padding: 15px 10px;
+    border-bottom: 1px solid var(--border);
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.ticket-table th {
+    background-color: var(--bg); /* Sfondo leggero per le intestazioni */
+    font-weight: 600;
+    color: #444;
+    text-align: center; 
+    /* Padding leggermente diverso per i titoli */
+    padding: 10px 10px; 
+}
+
+/* Allineamento specifico per colonne */
+/* Colonna ID (2a colonna): Centrata */
+.ticket-table th:nth-child(2), 
+.ticket-table td:nth-child(2) { 
+    width: 5%; /* Rende la colonna ID molto stretta */
+    text-align: center;
+}
+
+/* Colonna Utente (3a colonna): Allineata a Sinistra */
+.ticket-table th:nth-child(3), 
+.ticket-table td:nth-child(3) { 
+    width: 15%; /* Spazio per il nome utente */
+    text-align: left; 
+    word-break: break-all;
+}
+
+/* Colonna Titolo (4a colonna): Allineata a Sinistra e prende il resto dello spazio */
+.ticket-table th:nth-child(4), 
+.ticket-table td:nth-child(4) { 
+    width: 35%; /* La colonna più larga per il titolo */
+    text-align: left; 
+    overflow-wrap: break-word;
+}
+
+/* Colonna Stato e Priorità (5a e 6a colonna): Centrate e strette */
+.ticket-table th:nth-child(5), 
+.ticket-table td:nth-child(5),
+.ticket-table th:nth-child(6), 
+.ticket-table td:nth-child(6) { 
+    width: 12%; 
+    text-align: center;
+}
+
+/* Colonna Azioni (Ultima colonna): Centrata e stretta */
+.ticket-table th:last-child, 
+.ticket-table td:last-child { 
+    width: 15%; 
+    text-align: center;
+}
+
+.ticket-table th:last-child, /* Intestazione Azioni */
+.ticket-table td:last-child { /* Cella Azioni */
+    text-align: center;
+}
+
+
+.ticket-table td span.badge {
+    display: inline-block; /* Assicura che il badge stesso possa essere centrato nella cella */
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-width: 60px; /* Assicura una larghezza minima per centrarli bene */
+}
+
+
+/* Contenitore della tabella e del pannello note/dettagli */
+.ticket-table {
+    padding: 20px; 
+    display: flex;
+    flex-direction: column; /* La tabella e il box note sono uno sotto l'altro */
+    gap: 20px; /* Spazio tra la tabella e il box note */
+    width: 100%; /* Sfrutta tutta la larghezza disponibile */
+}
+
+
+
+/* Aggiungi padding laterale al contenuto di .ticket-table */
+.ticket-table h2 {
+    padding: 0 20px;
+}

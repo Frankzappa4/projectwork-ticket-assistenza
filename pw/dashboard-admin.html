@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="dashboard admin">
+    <header>
+        <h1>Pannello Amministratore</h1>
+        <div class="actions">
+            <button type="button" id="open-user-management" class="button">
+                Gestisci&nbsp;&nbsp;<span id="user-count-display">N</span>&nbsp;&nbsp;Utenti
+            </button>
+        
+            <a class="button" href="index.html">Logout</a>
+        </div>
+    </header>
+    <section class="widgets grid">
+    <article id="history-widget" class="card is-collapsed">
+        <header> 
+            <h3>Storico Eliminazioni (Ultimi 3)</h3>
+            <button type="button" class="collapse-btn" data-target="deleted-tickets-list">
+                <span class="collapse-icon">+</span> 
+            </button>
+        </header>
+        <div id="deleted-tickets-list" class="collapsible-content">
+            <p>Caricamento storico...</p>
+        </div>
+    </article>
+</section>
+
+<section class="card ticket-table">
+        <h2>Tutti i ticket</h2>
+        <table>
+            <thead>
+                <tr>
+                    <!-- La prima colonna (<th>) è per il checkbox, che è vuoto, e lo lasciamo. -->
+                    <th></th>
+                    <th>ID</th>
+                    <th>Utente</th>
+                    <th>Titolo</th>
+                    <th>Stato</th>
+                    <th>Priorità</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <br>
+        <div class="internal-notes" id="note-form-container">
+            <h3>Note interne (Ticket Selezionato)</h3>
+            
+            <div id="notes-list">
+                <p class="note-empty">Seleziona un ticket per vedere le note interne.</p>
+            </div>
+
+            <form id="add-note-form">
+                <textarea rows="4" placeholder="Aggiungi dettagli visibili solo al team..." required></textarea>
+                <input type="hidden" id="current-ticket-id" value=""> 
+                <button type="submit" id="add-note-button">Aggiungi Nota</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="modal" id="user-management-modal">
+        <div class="modal-content card">
+            <header>
+                <h2>Gestione Utenti Registrati</h2>
+                <button class="close-modal" id="close-user-management" type="button">X</button>
+            </header>
+
+            <table class="user-list-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Data Reg.</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <tr><td colspan="5">Caricamento utenti...</td></tr>
+                </tbody>
+            </table>
+
+            <footer>
+                <p class="note-meta">Nota: L'eliminazione dell'utente comporta la cancellazione a cascata di tutti i suoi ticket e le note associate.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+<script src="js/app.js"></script>
+</html>

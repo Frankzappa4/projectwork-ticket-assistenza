@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Registrazione</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+    <main class="card">
+        <h1>Benvenuto</h1>
+        <form id="login-form" class="auth-form is-active">
+            <h2>Accedi</h2>
+            <label>Email
+                <input type="email" placeholder="nome@esempio.com" required />
+            </label>
+            <label>Password
+                <input type="password" placeholder="••••••••" required />
+            </label>
+            <button type="submit">Accedi</button>
+            <p class="switch-link">
+                Non hai un account?
+                <button type="button" class="link-button" data-switch="register-form">Registrati</button>
+            </p>
+        </form>
+        <form id="register-form" class="auth-form">
+            <h2>Registrati</h2>
+            <label>Nome
+                <input type="text" placeholder="Mario Rossi" required />
+            </label>
+            <label>Email
+                <input type="email" placeholder="nome@esempio.com" required />
+            </label>
+            <label>Password
+                <input type="password" placeholder="Crea una password" required />
+            </label>
+            <button type="submit">Registrati</button>
+            <p class="switch-link">
+                Hai già un account?
+                <button type="button" class="link-button" data-switch="login-form">Accedi</button>
+            </p>
+        </form>
+    </main>
+    
+</body>
+<script src="js/app.js"></script>
+</html>
