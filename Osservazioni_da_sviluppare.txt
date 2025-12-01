@@ -1,0 +1,8 @@
+OSSERVAZIONI
+se viene inserito codice SQL dannoso nel campo "Descrizione", la libreria mysql2 in Node.js lo tratterà semplicemente come testo e non lo eseguirà come comando. I valori [user_id, title, description, priority] sono passati come array separato. Questo attiva i Prepared Statements
+
+L'altra forma comune di attacco che può avvenire tramite campi di testo (come la descrizione) è il Cross-Site Scripting (XSS). Questo accade quando un utente malintenzionato inserisce codice HTML o JavaScript nel campo (es. <script>alert('hacked')</script>), e questo codice viene poi visualizzato ed eseguito nel browser di un altro utente (ad esempio, un Admin che visualizza il ticket). Si potrebbe implementare la difesa contro l'XSS sul lato Frontend, durante la visualizzazione dei dati. In tutti i punti in cui si visualizzano contenuti generati dall'utente (come la descrizione del ticket o il contenuto della nota), usare la proprietà .textContent anziché .innerHTML.
+
+
+
+se vengono eliminate note dall'admin poi bob possa ricominciare dal numero dov'era rimasto, ad esempio: bob ha inviato 5 ticket, l'admin cancella i ticket numero 2 e 3, bob vuole scrivere un altro ticket e non sarà il numero 6 ma il numero 4
