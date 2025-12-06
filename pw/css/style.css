@@ -348,7 +348,8 @@ button,
     /* Posiziona l'elemento nella prima colonna e nella prima riga */
     grid-column: 1 / 2; /* Inizia alla linea 1, finisce alla linea 2 (prima colonna) */
     grid-row: 1 / 2;    /* Inizia alla linea 1, finisce alla linea 2 (prima riga) */
-   }
+    margin: auto;
+}
 
 .deleted-ticket-item {
     padding: 5px 0;
@@ -515,14 +516,9 @@ button,
 }
 
 /* Colonna Azioni (Ultima colonna): Centrata e stretta */
-.ticket-table th:last-child, 
-.ticket-table td:last-child { 
-    width: 15%; 
-    text-align: center;
-}
-
 .ticket-table th:last-child, /* Intestazione Azioni */
 .ticket-table td:last-child { /* Cella Azioni */
+    width: 15%; 
     text-align: center;
 }
 

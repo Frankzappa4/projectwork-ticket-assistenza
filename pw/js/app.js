@@ -23,24 +23,56 @@ const profileNameInput = document.getElementById('profile-name');
 const profileEmailInput = document.getElementById('profile-email');
 const profilePasswordInput = document.getElementById('profile-password');
 
+// FUNZIONE PER CARICARE I DATI DEL PROFILO UTENTE CORRENTE E POPOLARE IL MODALE
+async function fetchUserProfile() {
+    const userId = localStorage.getItem('userId');
+    const userRole = localStorage.getItem('userRole');
 
-// FUNZIONE PER GESTIRE L'APERTURA E CHIUSURA DEL MODALE PROFILO
+    if (!userId || userRole === 'admin') {
+        // Se l'ID non è presente (utente non loggato) o se siamo l'admin (che non ha questa sezione)
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+
+        if (!response.ok) {
+            // Se il server restituisce 404, l'utente non esiste più nel DB
+            console.error(`Errore API: ${response.status} - Impossibile recuperare il profilo.`);
+            throw new Error('Errore durante il recupero del profilo');
+        }
+        
+        const user = await response.json();
+        
+        // Popolazione dei campi
+        profileNameInput.value = user.name; 
+        profileEmailInput.value = user.email || localStorage.getItem('userEmail') || '';
+        // Il campo password DEVE essere sempre vuoto per non inviare l'hash
+        if (profilePasswordInput) {
+             profilePasswordInput.value = ''; 
+        }
+
+    } catch (error) {
+        console.error("Errore nel caricamento del profilo:", error);
+        // Mostra un messaggio visivo all'utente se la chiamata fallisce
+         alert("Impossibile caricare i dati del profilo.");
+    }
+}
+
+// CHIAMATA ALLA FUNZIONE AL CARICAMENTO DELLA DASHBOARD UTENTE
+if (document.body.classList.contains('dashboard') && !document.body.classList.contains('admin')) {
+    fetchUserProfile();
+}
+
+// LISTENER PER L'APERTURA E CHIUSURA DEL MODALE GESTIONE PROFILO
 if (openProfileManagementBtn && profileManagementModal && closeProfileManagementBtn) {
-    
-    // Funzione per caricare i dati attuali (Nome e Email)
-    const loadCurrentProfileData = () => {
-        // I dati utente (role, name, email, id) sono salvati nel localStorage al login
-        profileNameInput.value = localStorage.getItem('userName') || '';
-        profileEmailInput.value = localStorage.getItem('userEmail') || '';
-        profilePasswordInput.value = ''; // La password non viene mai precaricata
-    };
-
     // Apertura del modale
     openProfileManagementBtn.addEventListener('click', () => {
         profileManagementModal.classList.add('is-active');
-        loadCurrentProfileData(); 
+        // CARICA I DATI CORRENTI
+        fetchUserProfile(); 
     });
-
+    
     // Chiusura del modale (tramite pulsante X)
     closeProfileManagementBtn.addEventListener('click', () => {
         profileManagementModal.classList.remove('is-active');
@@ -54,7 +86,7 @@ if (openProfileManagementBtn && profileManagementModal && closeProfileManagement
     });
 }
 
-// FUNZIONE PER RECUPERARE IL CONTEGGIO UTENTI
+//FUNZIONE PER RECUPERARE IL CONTEGGIO UTENTI
 async function fetchUserCountAndRender() {
     if (!userCountDisplay) return; // Controlla se l'elemento esiste nel DOM
 
@@ -475,24 +507,6 @@ async function fetchAndRenderAllTickets() {
                     </select>
                 `;
 
-                const tableRow = `
-                    <tr data-ticket-id="${ticket.id}">
-                        <td>
-                            <input type="checkbox" class="select-ticket-checkbox" data-ticket-id="${ticket.id}" />
-                        </td>
-                        <td>#${ticket.id}</td>
-                        <td>${ticket.name || 'Sconosciuto'}</td>
-                        <td>${ticket.title}</td>
-                        <td>
-                            ${statusSelect}
-                        </td>
-                        <td>${ticket.priority}</td>
-                        <td>
-                            <button type="button" class="delete-ticket" data-ticket-id="${ticket.id}">Elimina</button>
-                        </td>
-                    </tr>
-                `;
-
                 tr.innerHTML = `
                     <td>
                         <input type="checkbox" class="select-ticket-checkbox" data-ticket-id="${ticket.id}" />
@@ -779,29 +793,6 @@ if (userRole === 'admin' && ticketTableBody) {
     fetchUserCountAndRender(); 
     // storico ticket
     fetchAndRenderHistory();
-}
-
-// LISTENER PER L'APERTURA E CHIUSURA DEL MODALE UTENTI
-if (openUserManagementBtn && userManagementModal && closeUserManagementBtn) {
-    // Apertura del modale
-    openUserManagementBtn.addEventListener('click', () => {
-        userManagementModal.classList.add('is-active');
-        // Carica i dati non appena il modale viene aperto
-        fetchAndRenderAllUsers(); 
-    });
-
-
-    // Chiusura del modale (tramite pulsante X)
-    closeUserManagementBtn.addEventListener('click', () => {
-        userManagementModal.classList.remove('is-active');
-    });
-
-    // Chiusura del modale (cliccando fuori dalla finestra)
-    userManagementModal.addEventListener('click', (e) => {
-        if (e.target.id === 'user-management-modal') {
-            userManagementModal.classList.remove('is-active');
-        }
-    });
 }
 
 // LISTENER E GESTIONE NOTE INTERNE (ADMIN DASHBOARD)

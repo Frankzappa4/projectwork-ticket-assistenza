@@ -10,6 +10,7 @@ const saltRounds = 10;
 // Middleware: Permette al server di interpretare JSON nelle richieste
 app.use(express.json());
 app.use(cors());
+app.use(express.static('.'))
 
 // Configurazione della connessione al Database MySQL
 const dbConfig = {
@@ -168,7 +169,7 @@ app.post('/api/register', async (req, res) => {
         }
 
         // 2. Hashing sicuro della password
-        // Ricorda che 'saltRounds' è definito all'inizio del file
+        // saltRounds è definito all'inizio del file
         const hashedPassword = await bcrypt.hash(trimmedPassword, saltRounds); 
         
         // 3. Inserimento del nuovo utente (role='user' di default)
@@ -493,6 +494,26 @@ app.get('/api/users', async (req, res) => {
     } catch (error) {
         // Se c'è un errore SQL, viene loggato qui
         console.error('Errore durante il recupero degli utenti:', error); 
+        res.status(500).json({ message: 'Errore interno del server.' });
+    }
+});
+
+// ROUTE: RECUPERO DETTAGLI SINGOLO UTENTE (GET /api/users/:userId)
+app.get('/api/users/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    
+    try {
+        // Selezioniamo solo i campi non sensibili (nome ed email) per popolare il form
+        const [users] = await connection.query('SELECT name, email FROM users WHERE id = ?', [userId]);
+
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Utente non trovato.' });
+        }
+
+        // Restituisce l'oggetto utente contenente nome ed email
+        res.status(200).json(users[0]);
+    } catch (error) {
+        console.error('Errore durante il recupero del profilo utente:', error);
         res.status(500).json({ message: 'Errore interno del server.' });
     }
 });
